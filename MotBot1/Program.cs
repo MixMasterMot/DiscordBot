@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Discord;
-//for windows 7
+//for windows 7 support
 using Discord.Net.Providers.WS4Net;
 
 namespace MotBot1
@@ -20,9 +20,9 @@ namespace MotBot1
 
         public async Task RunBotAsync()
         {
-            //for windows 8 +
+            //for windows 8 + support
             //_client = new DiscordSocketClient();
-            //for windows 7
+            //for windows 7 support
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 WebSocketProvider = WS4NetProvider.Instance,

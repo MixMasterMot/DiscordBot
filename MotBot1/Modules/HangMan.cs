@@ -16,6 +16,7 @@ namespace MotBot1.Modules
         private static string hdnHangManWord = null;
         private static List<string> LtrList = new List<string>();
         private static int strikes = 0;
+        private static int hints = 3;
 
         private static bool hangManGame = false;
 
@@ -23,6 +24,7 @@ namespace MotBot1.Modules
         {
             hangManGame = true;
             strikes = 0;
+            hints = 3;
             LtrList.Clear();
             hdnHangManWord = "";
 
@@ -77,6 +79,7 @@ namespace MotBot1.Modules
                     chars[i] = Convert.ToChar(ltr);
                 }
                 hdnHangManWord = new string(chars);
+                
             }
             else
             {
@@ -94,6 +97,12 @@ namespace MotBot1.Modules
             Embed cmp = null;
             if (strikes < 6)
             {
+                if (!hdnHangManWord.Contains("-"))
+                {
+                    takenLtrs = "Blyt you saved him";
+                    hangManGame = false;
+                }
+
                 builder.WithTitle(hdnHangManWord)
                 .WithDescription(hangman)
                 .WithColor(Color.Blue)
@@ -111,6 +120,66 @@ namespace MotBot1.Modules
             }
             
             
+
+            return new Tuple<string, Embed>("", cmp);
+        }
+
+        public static Tuple<string, Embed> Hint()
+        {
+            if (hangManGame == false)
+            {
+                return new Tuple<string, Embed>("Please start a game", null);
+            }
+            if (hints <= 0)
+            {
+                return new Tuple<string, Embed>("No hints left", null);
+            }
+            List<int> avaid = new List<int>();
+            for(int i =0;i< hdnHangManWord.Length; i++)
+            {
+                if (hdnHangManWord[i] == Convert.ToChar("-"))
+                {
+                    avaid.Add(i);
+                }
+            }
+
+            Random r = new Random();
+            int rInt = r.Next(0, avaid.Count - 1);
+            int revIndex = avaid[rInt];
+            char ltr = hangManWord[revIndex];
+
+            List<int> eachOcr = new List<int>();
+            for (int i = 0; i < hangManWord.Length; i++)
+            {
+                if (hangManWord[i] == ltr)
+                {
+                    eachOcr.Add(i);
+                }
+            }
+            char[] chars = hdnHangManWord.ToCharArray();
+            foreach (int i in eachOcr)
+            {
+                chars[i] = ltr;
+            }
+            hdnHangManWord = new string(chars);
+
+            LtrList.Add(Convert.ToString(ltr));
+            hints = hints - 1;
+
+            string takenLtrs = null;
+            foreach (string str in LtrList)
+            {
+                takenLtrs = takenLtrs + str + ", ";
+            }
+            string hangman = BuildHangMan(strikes);
+
+            EmbedBuilder builder = new EmbedBuilder();
+            Embed cmp = null;
+            builder.WithTitle(hdnHangManWord)
+                .WithDescription(hangman)
+                .WithColor(Color.Blue)
+                .WithFooter(takenLtrs);
+            cmp = builder.Build();
 
             return new Tuple<string, Embed>("", cmp);
         }
@@ -251,6 +320,5 @@ namespace MotBot1.Modules
             }
             return body;
         }
-
     }
 }
