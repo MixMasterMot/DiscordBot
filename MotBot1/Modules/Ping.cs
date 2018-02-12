@@ -24,6 +24,18 @@ namespace MotBot1.Modules
                 await ReplyAsync("Hang the hangman", false, HangMan.NewGame());
                 return;
             }
+            else if (ltr == "hint")
+            {
+                Tuple<string, Embed> tpl = HangMan.Hint();
+                if (tpl.Item1 != "")
+                {
+                    await ReplyAsync(tpl.Item1);
+                }
+                else
+                {
+                    await ReplyAsync("", false, tpl.Item2);
+                }
+            }
             else if (ltr.Length > 1)
             {
                 await ReplyAsync("Only one leter at a time");
