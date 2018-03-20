@@ -34,7 +34,7 @@ namespace MotBot1
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
-            //string botToken = "NDExNTIwNjg1NDIxMjMyMTM4.DV9nvA.BJm9pYyMOyqHFM0kZEjyNxUeIF8";
+            
 
             //event subscriptions
             _client.Log += Log;
